@@ -103,9 +103,11 @@ var app = new Vue({
     el: '#app',
     template:
         '<div>' +
-
         '<div v-if="!profile">Необходимо авторизироваться через <a href="/login">Google</a> </div>'+
-        '<messages-list  v-else :messages="messages" />'+
+        '<div v-else>'+
+        '<div>{{profile.name}}&nbsp;<a href="/logout">Выйти</a> </div>'+
+        '<messages-list   :messages="messages" />'+
+        '</div>'+
         '</div>',
 
     data: {
