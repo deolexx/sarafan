@@ -3,6 +3,7 @@ package com.deo.sarafan.controller;
 import com.deo.sarafan.entity.User;
 import com.deo.sarafan.repo.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,10 @@ import java.util.HashMap;
 @Controller
 @RequestMapping("/")
 class MainController {
+
+    @Value("${spring.profiles.active}")
+    private String profile;
+
     private final MessageRepo messageRepo;
     @Autowired
     MainController(MessageRepo messageRepo) {
@@ -27,6 +32,7 @@ class MainController {
         data.put("profile",user);
         data.put("messages",messageRepo.findAll());
         model.addAttribute("frontendData", data);
+        model.addAttribute("isDevMode","dev".equals(profile));
         return "index";
     }
 }
