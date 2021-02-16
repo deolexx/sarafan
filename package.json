@@ -8,7 +8,8 @@
     "@stomp/stompjs": "^6.0.0",
     "sockjs-client": "^1.5.0",
     "vue": "^2.6.12",
-    "vue-resource": "^1.5.1"
+    "vue-resource": "^1.5.1",
+    "vuetify": "^2.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
