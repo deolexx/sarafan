@@ -6,29 +6,26 @@
             <v-app-bar app>
                 <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-                <v-toolbar-title>Title</v-toolbar-title>
+                <v-toolbar-title>Sarafan</v-toolbar-title>
 
                 <v-spacer></v-spacer>
 
-                <v-btn icon>
-                    <v-icon>mdi-magnify</v-icon>
+
+              <span v-if="profile"> {{profile.name}}</span>
+                <v-btn v-if="profile" icon href="/logout" >
+                    <v-icon>mdi-exit-to-app</v-icon>
                 </v-btn>
 
-                <v-btn icon>
-                    <v-icon>mdi-heart</v-icon>
-                </v-btn>
-
-                <v-btn icon>
-                    <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
             </v-app-bar>
-            <div v-if="!profile">Необходимо авторизоваться через
+            <v-content><v-container v-if="!profile">Необходимо авторизоваться через
                 <a href="/login">Google</a>
-            </div>
-            <div v-else>
-                <div>{{profile.name}}&nbsp<a href="/logout">Выйти</a></div>
+            </v-container>
+
+              <v-container v-if="profile" >
                 <messages-list :messages="messages"/>
-            </div>
+              </v-container>
+                </v-content>
+
         </v-app>
 
 
