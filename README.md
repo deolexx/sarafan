@@ -1,3 +1,7 @@
 # sarafan
-npm start 
-nvm help
+
+
+#new dependencies
+vuex \
+@babel/polyfill \
+vue-router

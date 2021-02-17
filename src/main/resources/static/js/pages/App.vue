@@ -16,7 +16,7 @@
       </v-btn>
 
     </v-app-bar>
-    <v-content>
+    <v-main>
       <v-container v-if="!profile">Необходимо авторизоваться через
         <a href="/login">Google</a>
       </v-container>
@@ -24,7 +24,7 @@
       <v-container v-if="profile">
         <messages-list />
       </v-container>
-    </v-content>
+    </v-main>
 
   </v-app>
 
