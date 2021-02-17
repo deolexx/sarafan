@@ -43,8 +43,14 @@ export default {
       } else {
         messagesApi.add(message).then(result =>
             result.json().then(data => {
-              this.messages.push(data)
-              this.text = ''
+              const index = this.messages.findIndex(item => item.id === data.id)
+
+              if (index > -1) {
+                this.messages.splice(index, 1, data)
+
+              } else {
+                this.messages.push(data)
+              }
             })
         )
       }
