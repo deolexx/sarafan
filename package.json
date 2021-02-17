@@ -5,6 +5,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
     "@stomp/stompjs": "^6.0.0",
     "sockjs-client": "^1.5.0",
     "vue": "^2.6.12",

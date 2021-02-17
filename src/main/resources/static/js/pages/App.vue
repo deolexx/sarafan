@@ -22,7 +22,7 @@
       </v-container>
 
       <v-container v-if="profile">
-        <messages-list :messages="messages"/>
+        <messages-list />
       </v-container>
     </v-content>
 
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import MessagesList from 'components/messages/MessageList.vue'
 import {addHandler} from "util/ws"
 
@@ -40,12 +41,7 @@ export default {
   components: {
     MessagesList
   },
-  data() {
-    return {
-      messages: frontendData.messages,
-      profile: frontendData.profile
-    }
-  },
+  computed: mapState(['profile']),
   created() {
     addHandler(data => {
       if (data.objectType === 'MESSAGE') {
@@ -55,7 +51,9 @@ export default {
           case 'UPDATE' :
             if (index > -1) {
               this.messages.splice(index, 1, data.body)
-            } else {this.messages.push(data.body)}
+            } else {
+              this.messages.push(data.body)
+            }
             break;
           case 'REMOVE' :
             this.messages.splice(index, 1)
@@ -63,8 +61,7 @@ export default {
           default :
             console.error('Looks like the event type is unknown "${data.eventType}"')
         }
-      }
-      else {
+      } else {
         console.error('Looks like the object type is unknown "${data.objectType"}')
       }
     })
