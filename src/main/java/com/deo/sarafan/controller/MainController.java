@@ -1,7 +1,11 @@
 package com.deo.sarafan.controller;
 
 import com.deo.sarafan.entity.User;
+import com.deo.sarafan.entity.Views;
 import com.deo.sarafan.repo.MessageRepo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,27 +18,39 @@ import java.util.HashMap;
 
 @Controller
 @RequestMapping("/")
-class MainController {
+public class MainController {
+    private final MessageRepo messageRepo;
 
     @Value("${spring.profiles.active}")
     private String profile;
+    private final ObjectWriter writer;
 
-    private final MessageRepo messageRepo;
     @Autowired
-    MainController(MessageRepo messageRepo) {
+    public MainController(MessageRepo messageRepo, ObjectMapper mapper) {
         this.messageRepo = messageRepo;
+
+        this.writer = mapper
+                .setConfig(mapper.getSerializationConfig())
+                .writerWithView(Views.FullMessage.class);
     }
 
-
     @GetMapping
-    public String main(Model model, @AuthenticationPrincipal User user){
-        HashMap<Object, Object>data = new HashMap<>();
-        if(user !=null){
+    public String main(
+            Model model,
+            @AuthenticationPrincipal User user
+    ) throws JsonProcessingException {
+        HashMap<Object, Object> data = new HashMap<>();
+
+        if (user != null) {
             data.put("profile", user);
-            data.put("messages", messageRepo.findAll());
+
+            String messages = writer.writeValueAsString(messageRepo.findAll());
+            model.addAttribute("messages", messages);
         }
+
         model.addAttribute("frontendData", data);
-        model.addAttribute("isDevMode","dev".equals(profile));
+        model.addAttribute("isDevMode", "dev".equals(profile));
+
         return "index";
     }
 }

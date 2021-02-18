@@ -4,6 +4,7 @@ import com.deo.sarafan.dto.EventType;
 import com.deo.sarafan.dto.MetaDto;
 import com.deo.sarafan.dto.ObjectType;
 import com.deo.sarafan.entity.Message;
+import com.deo.sarafan.entity.User;
 import com.deo.sarafan.entity.Views;
 import com.deo.sarafan.repo.MessageRepo;
 import com.deo.sarafan.util.WsSender;
@@ -14,6 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,13 +30,11 @@ import static com.sun.activation.registries.LogSupport.log;
 @RestController
 @RequestMapping("message")
 public class MessageController {
-
-    private static String URL_PATTERN = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)";
-    private static String IMAGE_PATTERN = "(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png)";
+    private static String URL_PATTERN = "https?:\\/\\/?[\\w\\d\\._\\-%\\/\\?=&#]+";
+    private static String IMAGE_PATTERN = "\\.(jpeg|jpg|gif|png)$";
 
     private static Pattern URL_REGEX = Pattern.compile(URL_PATTERN, Pattern.CASE_INSENSITIVE);
-    private static Pattern IMAGE_REGEX = Pattern.compile(IMAGE_PATTERN, Pattern.CASE_INSENSITIVE);
-
+    private static Pattern IMG_REGEX = Pattern.compile(IMAGE_PATTERN, Pattern.CASE_INSENSITIVE);
 
     private final MessageRepo messageRepo;
     private final BiConsumer<EventType, Message> wsSender;
@@ -51,59 +51,63 @@ public class MessageController {
         return messageRepo.findAll();
     }
 
-    //id in @PathVariable show where to look for variable
     @GetMapping("{id}")
+    @JsonView(Views.FullMessage.class)
     public Message getOne(@PathVariable("id") Message message) {
-
-
         return message;
     }
 
-
     @PostMapping
-    public Message create(@RequestBody Message message) throws IOException {
+    public Message create(
+            @RequestBody Message message,
+            @AuthenticationPrincipal User user
+    ) throws IOException {
         message.setCreationDate(LocalDateTime.now());
         fillMeta(message);
+        message.setAuthor(user);
         Message updatedMessage = messageRepo.save(message);
+
         wsSender.accept(EventType.CREATE, updatedMessage);
+
         return updatedMessage;
     }
 
     @PutMapping("{id}")
-    public Message update(@PathVariable("id") Message messageFromDb,
-                          @RequestBody Message message) throws IOException {
+    public Message update(
+            @PathVariable("id") Message messageFromDb,
+            @RequestBody Message message
+    ) throws IOException {
         BeanUtils.copyProperties(message, messageFromDb, "id");
         fillMeta(messageFromDb);
         Message updatedMessage = messageRepo.save(messageFromDb);
+
         wsSender.accept(EventType.UPDATE, updatedMessage);
 
         return updatedMessage;
     }
 
-
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") Message message) {
         messageRepo.delete(message);
         wsSender.accept(EventType.REMOVE, message);
-
     }
 
-
     private void fillMeta(Message message) throws IOException {
-
         String text = message.getText();
         Matcher matcher = URL_REGEX.matcher(text);
-        if (matcher.find()){
+
+        if (matcher.find()) {
             String url = text.substring(matcher.start(), matcher.end());
 
-            matcher = IMAGE_REGEX.matcher(url);
+            matcher = IMG_REGEX.matcher(url);
 
             message.setLink(url);
 
-            if(matcher.find()){
-            message.setLinkCover(url);
+            if (matcher.find()) {
+                message.setLinkCover(url);
             } else if (!url.contains("youtu")) {
                 MetaDto meta = getMeta(url);
+
                 message.setLinkCover(meta.getCover());
                 message.setLinkTitle(meta.getTitle());
                 message.setLinkDescription(meta.getDescription());
@@ -126,7 +130,6 @@ public class MessageController {
     }
 
     private String getContent(Element element) {
-        return element== null ? "" : element.attr("content");
+        return element == null ? "" : element.attr("content");
     }
-
 }
