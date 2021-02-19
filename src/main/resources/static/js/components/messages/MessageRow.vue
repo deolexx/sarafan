@@ -20,7 +20,7 @@
                 mdi-account-circle
               </v-icon>
             </v-avatar>
-            {{ authorName }}
+            <span class="pl-2">{{ authorName }}</span>
 
           </div>
           <div>
@@ -30,7 +30,7 @@
         <v-card-actions>
             <v-btn value="Edit" @click="edit" small rounded>Edit</v-btn>
             <v-btn icon @click="del" small>
-                <v-icon>delete</v-icon>
+                <v-icon>mdi-delete-off</v-icon>
             </v-btn>
         </v-card-actions>
         <comment-list
