@@ -1,9 +1,11 @@
 <template>
-  <v-layout @keyup.13='save'>
-    <v-text-field label="Add comment" placeholder="Write something" v-model="text"/>
-    <v-btn @click="save">
-      Add
-    </v-btn>
+  <v-layout @keyup.13='save' class="px-3 pt-1">
+    <v-text-field outlined dense prepend-inner-icon="mdi-comment-processing-outline" label="Add comment" placeholder="Write something" v-model="text"/>
+    <span class="pl-2">
+      <v-btn @click="save">
+        Add
+      </v-btn>
+    </span>
 
   </v-layout>
 </template>

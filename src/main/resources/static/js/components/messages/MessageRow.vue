@@ -23,7 +23,7 @@
             <span class="pl-2">{{ authorName }}</span>
 
           </div>
-          <div>
+          <div class="pt-3">
             {{ message.text }}</div>
         </v-card-text>
         <media v-if="message.link" :message="message"></media>

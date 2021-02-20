@@ -18,7 +18,8 @@ import java.util.function.BiConsumer;
 public class  CommentService  {
 
 private final CommentRepo commentRepo;
-    private final BiConsumer<EventType, Object> wsSender;
+private final BiConsumer<EventType, Object> wsSender;
+
 
 
     @Autowired

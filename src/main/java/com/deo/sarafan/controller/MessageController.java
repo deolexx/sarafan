@@ -25,8 +25,6 @@ import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.sun.activation.registries.LogSupport.log;
-
 @RestController
 @RequestMapping("message")
 public class MessageController {

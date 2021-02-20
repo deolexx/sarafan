@@ -1,6 +1,6 @@
 <template>
-  <v-list-item>
-    <v-list-item-avatar>
+  <v-list-item  class="px-4" dense>
+    <v-list-item-avatar >
       <v-img :src="comment.author.userpic"></v-img>
     </v-list-item-avatar>
     <v-list-item-content>
