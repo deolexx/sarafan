@@ -4,11 +4,13 @@ package com.deo.sarafan.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@EqualsAndHashCode(of = {"id"})
 @Entity
 @Table
 @Data
