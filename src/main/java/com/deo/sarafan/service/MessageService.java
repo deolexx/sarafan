@@ -117,9 +117,9 @@ public class MessageService {
     public MessagePageDto findAll(Pageable pageable) {
         Page<Message> page = messageRepo.findAll(pageable);
         return new MessagePageDto(
-              page.getContent(),
+                page.getContent(),
                 pageable.getPageNumber(),
                 page.getTotalPages()
-                );
+        );
     }
 }

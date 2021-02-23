@@ -43,4 +43,12 @@ public class Message {
     private String linkDescription;
     @JsonView(Views.FullMessage.class)
     private String linkCover ;
+
+
+    public void setComments(List<Comment> comments) {
+        this.comments.clear();
+        if (comments != null) {
+            this.comments.addAll(comments);
+        }
+    }
 }

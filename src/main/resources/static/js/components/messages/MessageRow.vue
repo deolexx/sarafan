@@ -3,7 +3,7 @@
         <v-card-text primary-title>
           <div>
             <v-avatar
-                size="36"
+                size="48"
                 v-if="message.author && message.author.userpic"
 
             >
@@ -14,7 +14,7 @@
             </v-avatar>
             <v-avatar
                 v-else
-                size="36"
+                size="48"
                 color="indigo">
               <v-icon dark>
                 mdi-account-circle
