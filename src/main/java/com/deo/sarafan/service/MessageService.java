@@ -37,7 +37,6 @@ public class MessageService {
     private final MessageRepo messageRepo;
     private final BiConsumer<EventType, Message> wsSender;
 
-
     @Autowired
     public MessageService(MessageRepo messageRepo, WsSender wsSender) {
         this.messageRepo = messageRepo;
@@ -84,7 +83,6 @@ public class MessageService {
 
     private String getContent(Element element) {
         return element == null ? "" : element.attr("content");
-
     }
 
     public void delete(Message message) {
@@ -101,7 +99,6 @@ public class MessageService {
 
         return updatedMessage;
     }
-
 
     public Message create(Message message, User user) throws IOException {
         message.setCreationDate(LocalDateTime.now());

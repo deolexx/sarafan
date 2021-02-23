@@ -20,7 +20,11 @@ import java.util.List;
 @RequestMapping("message")
 public class MessageController {
 
+    public static  final int MESSAGES_PER_PAGE=3;
+
     private final MessageService messageService;
+
+
 
 
     @Autowired
@@ -29,9 +33,9 @@ public class MessageController {
     }
 
     @GetMapping
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.FullMessage.class)
     public MessagePageDto list(
-            @PageableDefault(size = 3,sort ={ "id" },direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(size = MESSAGES_PER_PAGE, sort = { "id" }, direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return messageService.findAll(pageable);
     }
@@ -47,7 +51,7 @@ public class MessageController {
             @RequestBody Message message,
             @AuthenticationPrincipal User user
     ) throws IOException {
-      return messageService.create(message,user);
+        return messageService.create(message, user);
     }
 
     @PutMapping("{id}")
@@ -55,15 +59,11 @@ public class MessageController {
             @PathVariable("id") Message messageFromDb,
             @RequestBody Message message
     ) throws IOException {
-        return messageService.update(messageFromDb,
-                message);
+        return messageService.update(messageFromDb, message);
     }
 
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") Message message) {
-     messageService.delete(message);
+        messageService.delete(message);
     }
-
-
-    }
-
+}
