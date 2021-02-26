@@ -19,9 +19,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,7 +36,6 @@ public class MessageService {
 
     private final MessageRepo messageRepo;
     private final BiConsumer<EventType, Message> wsSender;
-
 
     @Autowired
     public MessageService(MessageRepo messageRepo, WsSender wsSender) {
@@ -84,7 +83,6 @@ public class MessageService {
 
     private String getContent(Element element) {
         return element == null ? "" : element.attr("content");
-
     }
 
     public void delete(Message message) {
@@ -102,7 +100,6 @@ public class MessageService {
         return updatedMessage;
     }
 
-
     public Message create(Message message, User user) throws IOException {
         message.setCreationDate(LocalDateTime.now());
         fillMeta(message);
@@ -117,9 +114,9 @@ public class MessageService {
     public MessagePageDto findAll(Pageable pageable) {
         Page<Message> page = messageRepo.findAll(pageable);
         return new MessagePageDto(
-              page.getContent(),
+                page.getContent(),
                 pageable.getPageNumber(),
                 page.getTotalPages()
-                );
+        );
     }
 }
