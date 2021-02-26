@@ -6,6 +6,7 @@
                  :message="message"
                  :editMessage="editMessage"
                />
+    <lazy-loader></lazy-loader>
   </v-layout>
 </template>
 
@@ -13,11 +14,13 @@
 import {mapGetters} from 'vuex'
 import MessageRow from 'components/messages/MessageRow.vue'
 import MessageForm from 'components/messages/MessageForm.vue'
+import LazyLoader from '../LazyLoader.vue';
 
 
 export default {
 
   components: {
+    LazyLoader,
     MessageRow,
     MessageForm
   },
